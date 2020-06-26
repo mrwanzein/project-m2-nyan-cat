@@ -70,7 +70,7 @@ class Engine {
   collisionDetection = () => {
     let collided = false;
     this.enemies.forEach(enemy => {
-       if(enemy.y >= this.player.domElement.y - 110 && enemy.x === this.player.x) collided = true;
+       if(enemy.y >= this.player.domElement.y - 90 && enemy.x === this.player.x) collided = true;
     });
     return collided
   }
