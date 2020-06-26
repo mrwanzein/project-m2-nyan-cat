@@ -65,9 +65,21 @@ class Engine {
     setTimeout(this.gameLoop, 20);
   };
 
+
+  // logic for collision detection
+  collisionDetection = () => {
+    let collided = false;
+    this.enemies.forEach(enemy => {
+       if(enemy.y >= this.player.domElement.y - 110 && enemy.x === this.player.x) collided = true;
+    });
+    return collided
+  }
+
   // This method is not implemented correctly, which is why
   // the burger never dies. In your exercises you will fix this method.
   isPlayerDead = () => {
+    if(this.collisionDetection()) return true;
+    else 
     return false;
   };
 }
