@@ -19,9 +19,23 @@ class Player {
     this.domElement.src = 'images/player.png';
     this.domElement.style.position = 'absolute';
     this.domElement.style.left = `${this.x}px`;
-    this.domElement.style.top = ` ${y}px`;
+    this.domElement.style.top = `${y}px`;
     this.domElement.style.zIndex = '10';
     root.appendChild(this.domElement);
+
+    // Creating bullet DOM node
+    this.bulletY = y - 40;
+    this.baseBulletY = y - 40;
+    this.canShoot = false;
+
+    this.bulletDomElement = document.createElement('img');
+    this.bulletDomElement.src = 'images/shotThin.png';
+    this.bulletDomElement.style.position = 'absolute';
+    this.bulletDomElement.style.left = `${this.x + 30}px`;
+    this.bulletDomElement.style.top = `${this.bulletY}px`;
+    this.bulletDomElement.style.zIndex = '10';
+    this.bulletDomElement.style.visibility = 'hidden';
+    root.appendChild(this.bulletDomElement);
   }
 
   // This method will be called when the user presses the left key. See in Engine.js
@@ -30,8 +44,8 @@ class Player {
     if (this.x > 0) {
       this.x = this.x - PLAYER_WIDTH;
     }
-
     this.domElement.style.left = `${this.x}px`;
+    if(!this.canShoot) this.bulletDomElement.style.left = `${this.x + 30}px`;
   }
 
   // We do the same thing for the right key. See Engine.js to see when this happens.
@@ -40,5 +54,10 @@ class Player {
       this.x = this.x + PLAYER_WIDTH;
     }
     this.domElement.style.left = `${this.x}px`;
+    if(!this.canShoot) this.bulletDomElement.style.left = `${this.x + 30}px`;
+  }
+
+  shootBullet() {
+    this.canShoot = true;
   }
 }

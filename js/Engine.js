@@ -61,6 +61,19 @@ class Engine {
       return;
     }
 
+    // Checking if player can shoot bullets
+    if(this.player.canShoot) {
+      if(this.player.bulletY < 0) {
+        this.player.bulletY = this.player.baseBulletY;
+        this.player.bulletDomElement.style.left = `${this.player.x + 30}px`
+        this.player.bulletDomElement.style.visibility = 'hidden';
+        this.player.canShoot = false;
+      } else
+      this.player.bulletDomElement.style.visibility = 'unset';
+      this.player.bulletY -= timeDiff * 0.5;
+      this.player.bulletDomElement.style.top = `${this.player.bulletY}px`;
+    }
+
     // If the player is not dead, then we put a setTimeout to run the gameLoop in 20 milliseconds
     setTimeout(this.gameLoop, 20);
   };
