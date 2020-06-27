@@ -16,6 +16,7 @@ class Engine {
     this.enemies = [];
     // We add the background image to the game
     addBackground(this.root);
+
   }
 
   // The gameLoop will run every few milliseconds. It does several things
@@ -61,6 +62,19 @@ class Engine {
       return;
     }
 
+    // Checking if a bullet collided with a cat
+    if (this.bulletOnCatCollisionDetection()) {
+      this.player.bulletCollided = false;
+      
+      this.enemies.forEach(enemy => {
+        if(enemy.gotHit) { 
+         this.root.removeChild(enemy.domElement)
+         enemy.destroyed = true;
+        };
+      });
+
+    }
+
     // Checking if player can shoot bullets
     if(this.player.canShoot) {
       if(this.player.bulletY < 0) {
@@ -79,8 +93,8 @@ class Engine {
   };
 
 
-  // logic for collision detection
-  collisionDetection = () => {
+  // Logic for collision detection against the burger
+  catOnBurgerCollisionDetection = () => {
     let collided = false;
     this.enemies.forEach(enemy => {
        if(enemy.y >= this.player.domElement.y - 90 && enemy.x === this.player.x) collided = true;
@@ -88,11 +102,48 @@ class Engine {
     return collided
   }
 
+  // Logic for collision detection of the bullet against a cat
+  bulletOnCatCollisionDetection = () => {
+    this.enemies.forEach(enemy => {
+       if(enemy.y >= this.player.bulletDomElement.y - 40 && enemy.x === this.player.bulletDomElement.x - 30) {
+        this.player.bulletCollided = true;
+        this.player.canShoot = false;
+        enemy.gotHit = true;
+
+        this.explosion(enemy.x, enemy.y)
+        
+        this.player.bulletY = this.player.baseBulletY;
+        this.player.bulletDomElement.style.visibility = 'hidden';
+        this.player.bulletDomElement.style.top = `${this.player.bulletY}px`;
+        this.player.bulletDomElement.style.left = `${this.player.x + 30}px`
+       };
+    });
+    return this.player.bulletCollided;
+  }
+
   // This method is not implemented correctly, which is why
   // the burger never dies. In your exercises you will fix this method.
   isPlayerDead = () => {
-    if(this.collisionDetection()) return true;
+    if(this.catOnBurgerCollisionDetection()) return true;
     else 
     return false;
   };
+
+  explosion(catX, catY) {
+    let explosionDomElement = document.createElement('img');
+    explosionDomElement.src = 'images/explosion4.png';
+    explosionDomElement.style.position = 'absolute';
+    explosionDomElement.style.left = `${catX + 15}px`;
+    explosionDomElement.style.top = `${catY + 20}px`;
+    explosionDomElement.style.transform = 'scale(1.5)';
+    explosionDomElement.style.animationName = 'explode';
+    explosionDomElement.style.animationDuration = '2s';
+    explosionDomElement.style.zIndex = '10';
+    this.root.append(explosionDomElement);
+    
+    let dissipate = setTimeout(() => {
+      this.root.removeChild(explosionDomElement);
+      clearTimeout(dissipate);
+    }, 2000)
+  }
 }

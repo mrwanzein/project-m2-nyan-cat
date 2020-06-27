@@ -27,6 +27,7 @@ class Player {
     this.bulletY = y - 40;
     this.baseBulletY = y - 40;
     this.canShoot = false;
+    this.bulletCollided = false;
 
     this.bulletDomElement = document.createElement('img');
     this.bulletDomElement.src = 'images/shotThin.png';
