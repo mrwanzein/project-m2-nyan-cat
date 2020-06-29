@@ -1,19 +1,82 @@
 <html>
 <head>    
     <title>Nyan Kat</title> 
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+<style>
+@keyframes explode {
+    from {
+        opacity: 1;
+    }
 
-    <style>
-        @keyframes explode {
-            from {
-                    opacity: 1;
-                }
-
-            to {
-                    transform: scale(2);
-                    opacity: 0;
-                }
+    to {
+        transform: scale(2);
+        opacity: 0;
         }
-    </style>
+    }
+
+.play {
+    display: inline-block;
+    padding: 15px 75px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+    margin-top: 300px;
+    }
+
+.play:hover {background-color: #3e8e41}
+
+.play:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+    }
+
+.reset {
+    display: inline-block;
+    padding: 15px 75px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: grey;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+    margin-top: 50px;
+    visibility: hidden;
+}
+
+.reset:hover {background-color: rgb(163, 163, 163)}
+
+.reset:active {
+    background-color: lightgray;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+.UI {
+    display: inline-block;
+    margin-left: 400px;
+}
+
+.uiDivFlex {
+    display: flex;
+    flex-direction: column;
+}
+
+.lives {
+    margin-top: 20px;
+}
+</style>
 </head> 
 <body style="margin: 0">    
     <div id="app"></div> 
@@ -22,6 +85,6 @@
     <script src="js/engine-utilities.js"></script> 
     <script src="js/Engine.js"></script> 
     <script src="js/Player.js"></script> 
-    <script src="js/main.js"></script> 
+    <script src="js/main.js"></script>
 </body> 
 </html> 

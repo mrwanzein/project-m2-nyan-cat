@@ -58,7 +58,8 @@ class Engine {
     // We check if the player is dead. If he is, we alert the user
     // and return from the method (Why is the return statement important?)
     if (this.isPlayerDead()) {
-      window.alert('Game over');
+      gameOver.style.display = 'unset';
+      resetButton.style.visibility = 'unset';
       return;
     }
 
@@ -88,6 +89,10 @@ class Engine {
       this.player.bulletDomElement.style.top = `${this.player.bulletY}px`;
     }
 
+    // Adding score as the player is alive
+    this.player.score += Math.floor((timeDiff / 10));
+    score.innerHTML = `SCORE: ${gameEngine.player.score}`;
+
     // If the player is not dead, then we put a setTimeout to run the gameLoop in 20 milliseconds
     setTimeout(this.gameLoop, 20);
   };
@@ -105,17 +110,33 @@ class Engine {
   // Logic for collision detection of the bullet against a cat
   bulletOnCatCollisionDetection = () => {
     this.enemies.forEach(enemy => {
-       if(enemy.y >= this.player.bulletDomElement.y - 40 && enemy.x === this.player.bulletDomElement.x - 30) {
+       if(enemy.y >= this.player.bulletDomElement.y - 50 && enemy.x === this.player.bulletDomElement.x - 30) {
         this.player.bulletCollided = true;
         this.player.canShoot = false;
         enemy.gotHit = true;
 
+        // Trigger explosion annimation
         this.explosion(enemy.x, enemy.y)
         
+        // Reposition bullet after hit
         this.player.bulletY = this.player.baseBulletY;
         this.player.bulletDomElement.style.visibility = 'hidden';
         this.player.bulletDomElement.style.top = `${this.player.bulletY}px`;
-        this.player.bulletDomElement.style.left = `${this.player.x + 30}px`
+        this.player.bulletDomElement.style.left = `${this.player.x + 30}px`;
+
+        // Extra point annimation
+        let extraPoints = document.createElement('span');
+        extraPoints.style.fontFamily = 'Orbitron, sans-serif';
+        extraPoints.style.fontSize = '3em';
+        extraPoints.style.color = 'lightgreen';
+        extraPoints.innerHTML = '+50'
+        score.after(extraPoints);
+        this.player.score += 50;
+
+        let removeExtraPointUi = setTimeout(() => {
+          uiDivFlex.removeChild(extraPoints);
+          clearTimeout(removeExtraPointUi);
+        }, 1000);
        };
     });
     return this.player.bulletCollided;
@@ -129,6 +150,7 @@ class Engine {
     return false;
   };
 
+  // Render an explosion when a cat is hit
   explosion(catX, catY) {
     let explosionDomElement = document.createElement('img');
     explosionDomElement.src = 'images/explosion4.png';

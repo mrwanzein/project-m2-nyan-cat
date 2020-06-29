@@ -46,6 +46,7 @@ const addBackground = (root) => {
   bg.src = 'images/stars.png';
   bg.style.height = `${GAME_HEIGHT}px`;
   bg.style.width = `${GAME_WIDTH}px`;
+  bg.style.position = 'absolute';
 
   // We add it to the root DOM node
   root.append(bg);
@@ -63,4 +64,5 @@ const addBackground = (root) => {
   whiteBox.style.width = `${GAME_WIDTH}px`;
   whiteBox.style.background = '#fff';
   root.append(whiteBox);
+
 };
