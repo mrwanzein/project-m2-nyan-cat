@@ -35,12 +35,13 @@ class Player {
     this.bulletDomElement.style.left = `${this.x + 30}px`;
     this.bulletDomElement.style.top = `${this.bulletY}px`;
     this.bulletDomElement.style.zIndex = '10';
-    this.bulletDomElement.style.visibility = 'hidden';
+    this.bulletDomElement.style.display = 'none';
     root.appendChild(this.bulletDomElement);
 
     // Tracking score and lives
     this.score = 0;
-    this.lives = [];
+    this.lives = 3;
+    this.livesArr = [];
   }
 
   // This method will be called when the user presses the left key. See in Engine.js

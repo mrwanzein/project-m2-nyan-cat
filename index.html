@@ -2,6 +2,7 @@
 <head>    
     <title>Nyan Kat</title> 
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="images/player.png">
 <style>
 @keyframes explode {
     from {
@@ -9,7 +10,7 @@
     }
 
     to {
-        transform: scale(2);
+        transform: scale(.3);
         opacity: 0;
         }
     }
@@ -80,6 +81,26 @@
 </head> 
 <body style="margin: 0">    
     <div id="app"></div> 
+
+    <!-- Sounds from Zapsplat.com -->
+    <audio id="gameSong" preload="auto" loop>
+        <source src="sounds/music_zapsplat_electric_drum_and_bass.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+      <audio id="laser" preload="auto">
+        <source src="sounds/sound_spark_Laser-Like_Synth_Basic_Laser1_14.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+      <audio id="explosion" preload="auto">
+        <source src="sounds/zapsplat_explosion_large_boom_slight_distance_25207.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+      <audio id="getHit" preload="auto">
+        <source src="sounds/Horn_1_a.wav" type="audio/wav">
+        Your browser does not support the audio element.
+      </audio>
+      <!-- Sounds from Zapsplat.com -->
+
     <script src="js/data.js"></script> 
     <script src="js/Enemy.js"></script> 
     <script src="js/engine-utilities.js"></script> 

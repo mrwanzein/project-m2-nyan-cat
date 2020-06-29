@@ -8,6 +8,12 @@ let instruction = setInterval(() => {
   clearTimeout(instruction);
 }, 200);
 
+// Game sounds
+const gameSong = document.getElementById('gameSong');
+const laser = document.getElementById('laser');
+const explosion = document.getElementById('explosion');
+const getHit = document.getElementById('getHit');
+
 // DOM references and creations
 const root = document.getElementById('app');
 const uiDiv = document.createElement('div');
@@ -57,8 +63,18 @@ const keydownHandler = (event) => {
   
   if (event.code === 'Space') {
     gameEngine.player.shootBullet();
+    laser.play();
   }
 };
+
+const fillLives = () => {
+  for(let i=0; i<gameEngine.player.lives; i++) {
+    let life = document.createElement('img');
+    life.src = './images/player.png';
+    gameEngine.player.livesArr.push(life);
+    lives.append(life);
+  }
+}
 
 // We add an event listener to document. document the ancestor of all DOM nodes in the DOM.
 document.addEventListener('keydown', keydownHandler);
@@ -81,12 +97,7 @@ uiDiv.append(uiDivFlex);
 uiDivFlex.append(score);
 uiDivFlex.append(lives);
 
-for(let i=0; i<3; i++) {
-  let life = document.createElement('img');
-  life.src = './images/player.png';
-  gameEngine.player.lives.push(life);
-  lives.append(life);
-}
+fillLives();
 
 uiDivFlex.append(playButton);
 uiDivFlex.append(resetButton);
@@ -95,13 +106,20 @@ uiDivFlex.append(resetButton);
 const startGame = () => {
   gameEngine.gameLoop();
   playButton.style.visibility = 'hidden';
+  gameSong.play();
 }
 
 const restartGame = () => {
-  gameEngine.gameLoop();
   resetButton.style.visibility = 'hidden';
   gameOver.style.display = 'none';
+  gameEngine.player.lives = 3;
   gameEngine.player.score = 0;
+  fillLives();
+  gameEngine.gameLoop();
+  
+  // let smallPauseBeforeRestart = setTimeout(() => {
+  //   clearTimeout(smallPauseBeforeRestart);
+  // }, 200);
 }
 
 // Event listeners to our buttons to start and restart the game

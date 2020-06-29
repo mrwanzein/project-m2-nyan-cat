@@ -14,6 +14,16 @@ class Engine {
     // Initially, we have no enemies in the game. The enemies property refers to an array
     // that contains instances of the Enemy class
     this.enemies = [];
+    this.explosionArr = [
+      'images/explosion00.png',
+      'images/explosion01.png',
+      'images/explosion02.png',
+      'images/explosion03.png',
+      'images/explosion04.png',
+      'images/explosion05.png',
+      'images/explosion06.png',
+      'images/explosion07.png'
+    ];
     // We add the background image to the game
     addBackground(this.root);
 
@@ -81,10 +91,10 @@ class Engine {
       if(this.player.bulletY < 0) {
         this.player.bulletY = this.player.baseBulletY;
         this.player.bulletDomElement.style.left = `${this.player.x + 30}px`
-        this.player.bulletDomElement.style.visibility = 'hidden';
+        this.player.bulletDomElement.style.display = 'none';
         this.player.canShoot = false;
       } else
-      this.player.bulletDomElement.style.visibility = 'unset';
+      this.player.bulletDomElement.style.display = 'block';
       this.player.bulletY -= timeDiff * 0.5;
       this.player.bulletDomElement.style.top = `${this.player.bulletY}px`;
     }
@@ -93,6 +103,9 @@ class Engine {
     this.player.score += Math.floor((timeDiff / 10));
     score.innerHTML = `SCORE: ${gameEngine.player.score}`;
 
+    // Collision detection
+    this.catOnBurgerCollisionDetection();
+
     // If the player is not dead, then we put a setTimeout to run the gameLoop in 20 milliseconds
     setTimeout(this.gameLoop, 20);
   };
@@ -100,11 +113,19 @@ class Engine {
 
   // Logic for collision detection against the burger
   catOnBurgerCollisionDetection = () => {
-    let collided = false;
     this.enemies.forEach(enemy => {
-       if(enemy.y >= this.player.domElement.y - 90 && enemy.x === this.player.x) collided = true;
+       if(enemy.y >= this.player.domElement.y - 90 && enemy.x === this.player.x) {
+        getHit.play();
+        this.player.lives -= 1;
+        root.removeChild(enemy.domElement);
+        this.explosion(enemy.x, enemy.y)
+        enemy.destroyed = true;
+        lives.removeChild(this.player.livesArr[this.player.lives]);
+        this.player.livesArr.splice(this.player.lives, 1);
+        
+        this.gettingHitEffect();
+       };
     });
-    return collided
   }
 
   // Logic for collision detection of the bullet against a cat
@@ -116,11 +137,12 @@ class Engine {
         enemy.gotHit = true;
 
         // Trigger explosion annimation
-        this.explosion(enemy.x, enemy.y)
+        this.explosion(enemy.x, enemy.y);
+        explosion.play();
         
         // Reposition bullet after hit
         this.player.bulletY = this.player.baseBulletY;
-        this.player.bulletDomElement.style.visibility = 'hidden';
+        this.player.bulletDomElement.style.display = 'none';
         this.player.bulletDomElement.style.top = `${this.player.bulletY}px`;
         this.player.bulletDomElement.style.left = `${this.player.x + 30}px`;
 
@@ -145,27 +167,60 @@ class Engine {
   // This method is not implemented correctly, which is why
   // the burger never dies. In your exercises you will fix this method.
   isPlayerDead = () => {
-    if(this.catOnBurgerCollisionDetection()) return true;
+    if(this.player.lives === 0) return true;
     else 
     return false;
   };
 
   // Render an explosion when a cat is hit
-  explosion(catX, catY) {
+  explosion(catX, catY, randomExplosion = Math.floor(Math.random() * this.explosionArr.length)) {
     let explosionDomElement = document.createElement('img');
-    explosionDomElement.src = 'images/explosion4.png';
+    explosionDomElement.src = this.explosionArr[randomExplosion];
     explosionDomElement.style.position = 'absolute';
-    explosionDomElement.style.left = `${catX + 15}px`;
-    explosionDomElement.style.top = `${catY + 20}px`;
-    explosionDomElement.style.transform = 'scale(1.5)';
+    explosionDomElement.style.left = `${catX - 260}px`;
+    explosionDomElement.style.top = `${catY - 160}px`;
+    explosionDomElement.style.transform = 'scale(.2)';
     explosionDomElement.style.animationName = 'explode';
     explosionDomElement.style.animationDuration = '2s';
     explosionDomElement.style.zIndex = '10';
+    explosionDomElement.style.overflow = 'hidden';
     this.root.append(explosionDomElement);
     
     let dissipate = setTimeout(() => {
       this.root.removeChild(explosionDomElement);
       clearTimeout(dissipate);
     }, 2000)
+  }
+
+  // Effect when the burger is hit
+  gettingHitEffect() {
+    this.player.domElement.style.visibility = 'hidden';
+        setTimeout(() => {
+          this.player.domElement.style.visibility = 'visible';
+        }, 100);
+        
+        setTimeout(() => {
+          this.player.domElement.style.visibility = 'hidden';
+        }, 200);
+        
+        setTimeout(() => {
+          this.player.domElement.style.visibility = 'visible';
+        }, 300);
+        
+        setTimeout(() => {
+          this.player.domElement.style.visibility = 'hidden';
+        }, 400);
+        
+        setTimeout(() => {
+          this.player.domElement.style.visibility = 'visible';
+        }, 500);
+
+        setTimeout(() => {
+          this.player.domElement.style.visibility = 'hidden';
+        }, 600);
+
+        setTimeout(() => {
+          this.player.domElement.style.visibility = 'visible';
+        }, 700);
   }
 }
