@@ -1,6 +1,5 @@
-SuperLaserBurger1
-SuperLaserBurger2
-SuperLaserBurger3
+
+
 Link: https://superlaserburger.netlify.app/
 
 Added features:
